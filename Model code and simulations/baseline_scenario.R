@@ -4,7 +4,7 @@ library(dplyr)
 library(ggplot2)
 library(gridExtra)
 
-source("../Model code/soft_sel_model_function.R")
+source("soft_sel_model_function.R")
 
 nreps<- 20
 

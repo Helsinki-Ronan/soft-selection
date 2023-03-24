@@ -19,13 +19,13 @@ dat1 <- bind_rows(replicate(nreps, soft_sel_model(K=100, N_local=100, F=0.5, p_l
 #dat1$RpS[is.na(dat1$RpS)==TRUE] <- 0
 
 # Which replicates went extinct?
-## figure out way to determine which reps went extinct and which didn't, and then plot mean trajecories for each category in graphs.
+## figure out way to determine which reps went extinct and which didn't, and then plot mean trajectories for each category in graphs.
 
 
 dat1$replicate <- sort(rep(rep(1:nreps),100))
 
 res<- dat1 %>% 
-  group_by(Generation) %>%
+    group_by(Generation) %>%
     summarise(N_Recruits = mean(N_recruits, na.rm=T),
               N_Breeders = mean(N_breeders, na.rm=T),
               RPS = mean(RpS, na.rm=T),
