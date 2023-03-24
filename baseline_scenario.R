@@ -11,7 +11,7 @@ nreps<- 20
 # 1. Baseline case.
 p<- 0.5 # enter desired starting allele freq locals hard trait here
 
-dat1 <- bind_rows(replicate(nreps, soft_sel_model(K=100, N_local=100, F=0, p_local_hard_unique=p, p_nonlocal_hard_unique=p, p_local_soft_unique = p, p_nonlocal_soft_unique=p, h2_init=0.25, soft_switch = FALSE, Wmax = 0.55, Theta=0, num_loci_shared = 0), simplify = FALSE))
+dat1 <- bind_rows(replicate(nreps, soft_sel_model(K=100, N_local=100, F=0, p_local_hard_unique=p, p_nonlocal_hard_unique=p, p_local_soft_unique = p, p_nonlocal_soft_unique=p, h2_init=0.25, soft_switch = TRUE, Wmax = 0.75, Theta=0, num_loci_shared = 28), simplify = FALSE))
 
 # Replace NAs with 0s for the pop size variables (as NA = gone extinct)
 dat1$N_breeders[is.na(dat1$N_breeders)==TRUE] <- 0

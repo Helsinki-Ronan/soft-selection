@@ -315,7 +315,7 @@ soft_sel_model<- function(
       Output[Igen,9]<-mean(G[,2], na.rm=T)
       Output[Igen,10]<-var(G[,2], na.rm=T)
       if(is.na(var(G[,1]))==FALSE & var(G[,1])>0 & var(G[,2])>0){
-        Output[Igen,11]<-cor(G[,1],G[,2])
+        Output[Igen,11]<-cor(G[,1],G[,2],use="pairwise.complete.obs")
       }
       Output[Igen,12]<-mean(Genotypes_neutral,na.rm=T)
       Output[Igen,13]<-sum(s, na.rm=T)
