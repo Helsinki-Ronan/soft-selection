@@ -357,7 +357,7 @@ soft_selection<- function(
         genotypes_both <- genotypes_hard[,((num_loci_unique*2)+1):(num_loci_total*2)]
       }
       
-      
+      # TOM, we should externalise the choose_gamete function. This affects the apply function call. Do you think this is a quick fix or?
       gametes_soft_unique	<- t(apply(genotypes_soft_unique, 1, choose_gamete, n=num_loci_unique))
       gametes_hard_unique	<- t(apply(genotypes_hard_unique, 1, choose_gamete, n=num_loci_unique))
       gametes_both	<- t(apply(genotypes_both, 1, choose_gamete, n=num_loci_shared))
