@@ -18,4 +18,3 @@ choose_gamete<- function(x, num_loci_total) {
     # Return designated subset.
 }
 
-
