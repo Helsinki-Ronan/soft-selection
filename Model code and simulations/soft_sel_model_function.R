@@ -1,5 +1,5 @@
-source("gamete.function.R")
-
+#source("choose_gamete.function.R")
+# Need to look into sourcing functions within a package----
 soft_sel_model<- function(
     Maxgen = 100,
     K =  100,
@@ -226,10 +226,10 @@ soft_sel_model<- function(
         Genotypes_both <- Genotypes_hard[,((num_loci_unique*2)+1):(num_loci_total*2)]
       }
       
-      Gametes_soft_unique	<- t(apply(Genotypes_soft_unique, 1, GAMETE, n=num_loci_unique))
-      Gametes_hard_unique	<- t(apply(Genotypes_hard_unique, 1, GAMETE, n=num_loci_unique))
-      Gametes_both	<- t(apply(Genotypes_both, 1, GAMETE, n=num_loci_shared))
-      Gametes_neutral	<- matrix(apply(Genotypes_neutral, 1, GAMETE, n=1), nrow=length(ID_breeders),1)
+      Gametes_soft_unique	<- t(apply(Genotypes_soft_unique, 1, choose_gamete, n=num_loci_unique))
+      Gametes_hard_unique	<- t(apply(Genotypes_hard_unique, 1, choose_gamete, n=num_loci_unique))
+      Gametes_both	<- t(apply(Genotypes_both, 1, choose_gamete, n=num_loci_shared))
+      Gametes_neutral	<- matrix(apply(Genotypes_neutral, 1, choose_gamete, n=1), nrow=length(ID_breeders),1)
       
       # Get gametes from "females"
       x    					<- seq(1, length(ID_breeders)) 
