@@ -4,19 +4,20 @@ library(dplyr)
 library(ggplot2)
 library(gridExtra)
 
-source("soft_sel_model_function.R")
+#source("soft_sel_model_function.R")
 
 nreps<- 20
 
 # 1. Baseline case.
 p<- 0.75 # enter desired starting allele freq locals hard trait here
 
-dat1 <- bind_rows(replicate(nreps, soft_sel_model(K=100, N_local=100, F=0.5, p_local_hard_unique=p, p_nonlocal_hard_unique=0.25, p_local_soft_unique = p, p_nonlocal_soft_unique=p, p_local_shared=p, p_nonlocal_shared=p, h2_init=0.25, soft_switch = FALSE, Wmax = 0.55, Theta=0, num_loci_shared=0), simplify = FALSE))
+dat1 <- bind_rows(replicate(nreps, soft_selection(K=50, N_local=60, F=0.5, p_local_hard_unique=p, p_nonlocal_hard_unique=0.25, p_local_soft_unique = p, p_nonlocal_soft_unique=p,
+                                                  p_local_shared=p, p_nonlocal_shared=p, h2_init=0.25, soft_switch = FALSE, Wmax = 0.55, Theta=0, num_loci_shared=0), simplify = FALSE))
 
 # Replace NAs with 0s for the pop size variables (as NA = gone extinct)
-#dat1$N_breeders[is.na(dat1$N_breeders)==TRUE] <- 0
-#dat1$N_recruits[is.na(dat1$N_recruits)==TRUE] <- 0
-#dat1$RpS[is.na(dat1$RpS)==TRUE] <- 0
+dat1$N_breeders[is.na(dat1$N_breeders)==TRUE] <- 0
+dat1$N_recruits[is.na(dat1$N_recruits)==TRUE] <- 0
+dat1$RpS[is.na(dat1$RpS)==TRUE] <- 0
 
 # Which replicates went extinct?
 ## figure out way to determine which reps went extinct and which didn't, and then plot mean trajectories for each category in graphs.
