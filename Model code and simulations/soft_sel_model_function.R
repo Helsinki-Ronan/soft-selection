@@ -1,11 +1,3 @@
-#source("choose_gamete.function.R")
-# Need to look into sourcing functions within a package----
-
-
-
-
-
-
 
 
 
