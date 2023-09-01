@@ -2,12 +2,19 @@
 
 
 
-# Plotting of model output for soft selection study----
+                              ##%######################################################%##
+                              #                                                          #
+                              ####            Plotting of main figures for            ####
+                              ####   "Soft selection affects introgression dynamics   ####
+                              ####          and the viability of populations          ####
+                              ####               experiencing intrusion               ####
+                              ####          from maladapted individuals"----          ####
+                              #                                                          #
+                              ##%######################################################%##
 
 
+# Set working directory and load packages----
 setwd("C:\\Users\\rjosul\\Dropbox\\Research\\soft_selection_output\\Output")
-
-
 
 library(dplyr)
 library(forcats)
@@ -18,16 +25,27 @@ library(patchwork)
 
 
 
-# Figure 1----
+                              ##%######################################################%##
+                              #                                                          #
+                              ####                   Figure 1----                     ####
+                              #                                                          #
+                              ##%######################################################%##
+
+# 1.1 Load data----
 dat<- read.csv("baseline_set1_output.csv", header=T)
 
 
+# 1.2 Set colour scheme----
 palette<- c("#D55E00", "#009E73", "#CC79A7")
 
+
+# 1.3 Relevel reproductive excess variable----
 dat <- dat %>% 
   mutate(repr.excess=factor(repr.excess)) %>% 
   mutate(repr.excess=fct_relevel(repr.excess,c("low","moderate","high")))
 
+
+# 1.4 Soft-selected trait plot----
 p1<- ggplot(dat, aes(Generation, Mean_P_soft, colour=repr.excess))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) + xlim(0,100) + 
@@ -41,8 +59,11 @@ p1<- ggplot(dat, aes(Generation, Mean_P_soft, colour=repr.excess))+
         plot.title = element_text(size = 15, face = "bold"),
         text = element_text(size = 12),
         axis.text.x =  element_text(colour = "black", size = 14),
-        axis.text.y =  element_text(colour = "black", size = 14), axis.line = element_line(colour = "black"))
+        axis.text.y =  element_text(colour = "black", size = 14), 
+        axis.line = element_line(colour = "black"))
 
+
+# 1.5 Hard-selected trait plot----
 p2<- ggplot(dat, aes(Generation, Mean_P_hard, colour=repr.excess))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) + xlim(0,100) + 
@@ -52,17 +73,18 @@ p2<- ggplot(dat, aes(Generation, Mean_P_hard, colour=repr.excess))+
   xlab("")+
   ggtitle("Mean of hard-selected trait")+
   labs(colour = "Reproductive excess") +
-  scale_color_manual(labels = c("Low", "Moderate", "High"), values = c("#D55E00", "#009E73", "#CC79A7")) +
+  scale_color_manual(labels = c("Low", "Moderate", "High"), 
+                     values = c("#D55E00", "#009E73", "#CC79A7")) +
   theme_bw()+
   theme(legend.position = c(0.77, 0.8),
         plot.title = element_text(size = 15, face = "bold"),
         text = element_text(size = 12),
         axis.text.x =  element_text(colour = "black", size = 14),
-        axis.text.y =  element_text(colour = "black", size = 14), axis.line = element_line(colour = "black"))
+        axis.text.y =  element_text(colour = "black", size = 14), 
+        axis.line = element_line(colour = "black"))
 
 
-
-
+# 1.6 Genetic variance in soft-selected trait plot----
 p3<- ggplot(dat, aes(Generation, Var_G_soft, colour=repr.excess))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,100) + 
@@ -80,6 +102,8 @@ p3<- ggplot(dat, aes(Generation, Var_G_soft, colour=repr.excess))+
         axis.text.y =  element_text(colour = "black", size = 14),
         axis.line = element_line(colour = "black"))
 
+
+# 1.7 Genetic variance in hard-selected trait plot----
 p4<- ggplot(dat, aes(Generation, Var_G_hard, colour=repr.excess))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,100) + 
@@ -98,20 +122,29 @@ p4<- ggplot(dat, aes(Generation, Var_G_hard, colour=repr.excess))+
         axis.line = element_line(colour = "black"))
 
 
-(p1+p2)/(p3+p4) + plot_annotation(tag_levels = 'A') 
+# 1.8 Combine the above four plots into four panels in a single figure----
+(p1+p2)/(p3+p4) + plot_annotation(tag_levels = 'A')
 
 
 
 
-# Figure 2----
+                          ##%######################################################%##
+                          #                                                          #
+                          ####                   Figure 2----                     ####
+                          #                                                          #
+                          ##%######################################################%##
+
+
 dat<- read.csv("baseline_set2_output.csv", header=T)
 
-# Replace NAs with 0s for the pop size variables (as NA = gone extinct)
+
+# 2.1 Replace NAs with 0s for the pop size variables (as NA = gone extinct)
 dat$N_breeders[dat$N_breeders==0] <- NA
 dat$N_recruits[dat$N_recruits==0] <- NA
 dat$RpS[dat$RpS==0] <- NA
 
 
+# 2.2 Soft-selected trait plot----
 p1<- ggplot(dat, aes(Generation, Mean_P_soft))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,100) + 
@@ -128,6 +161,8 @@ p1<- ggplot(dat, aes(Generation, Mean_P_soft))+
         axis.text.y =  element_text(colour = "black", size = 14),
         axis.line = element_line(colour = "black"))
 
+
+# 2.3 Hard-selected trait plot----
 p2<- ggplot(dat, aes(Generation, Mean_P_hard))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,100) + 
@@ -145,6 +180,8 @@ p2<- ggplot(dat, aes(Generation, Mean_P_hard))+
         axis.text.y =  element_text(colour = "black", size = 14),
         axis.line = element_line(colour = "black"))
 
+
+# 2.4 Recruits per spawner plot----
 p3<- ggplot(dat, aes(Generation, RpS))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,100) + 
@@ -162,6 +199,8 @@ p3<- ggplot(dat, aes(Generation, RpS))+
         axis.text.y =  element_text(colour = "black", size = 14),
         axis.line = element_line(colour = "black"))
 
+
+# 2.5 Number of spawners plot----
 p4<- ggplot(dat, aes(Generation, N_breeders))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,100) + 
@@ -178,11 +217,13 @@ p4<- ggplot(dat, aes(Generation, N_breeders))+
         axis.text.y =  element_text(colour = "black", size = 14),
         axis.line = element_line(colour = "black"))
 
+
+# 2.6 Combine the above four plots into four panels in a single figure----
 (p2+p3)/(p1+p4) + plot_layout(guides = "collect") + plot_annotation(tag_levels = 'A') 
 
-# Fraction replicates that went extinct:
 
-# Replace NAs with 0s for the pop size variables (as NA = gone extinct)
+# 2.7 Fraction replicates that went extinct----
+# 2.7.1 Replace NAs with 0s for the pop size variables (as NA = gone extinct)----
 dat$N_breeders[is.na(dat$N_breeders)==TRUE] <- 0
 dat$N_recruits[is.na(dat$N_recruits)==TRUE] <- 0
 dat$RpS[is.na(dat$RpS)==TRUE] <- 0
@@ -192,19 +233,32 @@ length(minN[minN==0])/length(minN)
 
 
 
+                              
+                              ##%######################################################%##
+                              #                                                          #
+                              ####                   Figure 3----                     ####
+                              #                                                          #
+                              ##%######################################################%##
 
-# Figure 3----
+
 dat<- read.csv("intrusion_one-off_set1_output.csv", header=T)
 
+
+# 3.1 Relevel competitive ability variable----
 dat <- dat %>% 
   mutate(Comp=factor(Comp)) %>% 
-  mutate(Comp=fct_relevel(Comp,c("intruders competitively inferior","intruders competitively equal","intruders competitively superior")))
+  mutate(Comp=fct_relevel(Comp,c("intruders competitively inferior",
+                                 "intruders competitively equal",
+                                 "intruders competitively superior")))
 
-# Replace NAs with 0s for the pop size variables (as NA = gone extinct)
+
+# 3.2 Replace NAs with 0s for the pop size variables (as NA = gone extinct)----
 dat$N_breeders[dat$N_breeders==0] <- NA
 dat$N_recruits[dat$N_recruits==0] <- NA
 dat$RpS[dat$RpS==0] <- NA
 
+
+# 3.3 Soft-selected trait plot----
 p1<- ggplot(dat, aes(Generation, Mean_P_soft, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,100) + 
@@ -218,8 +272,11 @@ p1<- ggplot(dat, aes(Generation, Mean_P_soft, colour=Comp))+
         plot.title = element_text(size = 15, face = "bold"),
         text = element_text(size = 12),
         axis.text.x =  element_text(colour = "black", size = 14),
-        axis.text.y =  element_text(colour = "black", size = 14), axis.line = element_line(colour = "black"))
+        axis.text.y =  element_text(colour = "black", size = 14), 
+        axis.line = element_line(colour = "black"))
 
+
+# 3.4 Hard-selected trait plot----
 p2<- ggplot(dat, aes(Generation, Mean_P_hard, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   ylim(-20,10)+
@@ -235,8 +292,11 @@ p2<- ggplot(dat, aes(Generation, Mean_P_hard, colour=Comp))+
         plot.title = element_text(size = 15, face = "bold"),
         text = element_text(size = 12),
         axis.text.x =  element_text(colour = "black", size = 14),
-        axis.text.y =  element_text(colour = "black", size = 14), axis.line = element_line(colour = "black"))
+        axis.text.y =  element_text(colour = "black", size = 14), 
+        axis.line = element_line(colour = "black"))
 
+
+# 3.5 Recruits per spawner plot----
 p3<- ggplot(dat, aes(Generation, RpS, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,100) + 
@@ -256,6 +316,7 @@ p3<- ggplot(dat, aes(Generation, RpS, colour=Comp))+
         axis.line = element_line(colour = "black"))
 
 
+# 3.6 Number of spawners plot----
 p4<- ggplot(dat, aes(Generation, N_breeders, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,100) + 
@@ -274,13 +335,12 @@ p4<- ggplot(dat, aes(Generation, N_breeders, colour=Comp))+
         axis.line = element_line(colour = "black"))
 
 
-
+# 3.7 Combine the above four plots into four panels in a single figure----
 (p1 + p2)/(p3+p4) + plot_annotation(tag_levels = 'A')
 
 
-# Fraction replicates that went extinct:
-
-# Replace NAs with 0s for the pop size variables (as NA = gone extinct)
+# 3.8 Fraction replicates that went extinct----
+# 3.8.1 Replace NAs with 0s for the pop size variables (as NA = gone extinct)----
 dat$N_breeders[is.na(dat$N_breeders)==TRUE] <- 0
 dat$N_recruits[is.na(dat$N_recruits)==TRUE] <- 0
 dat$RpS[is.na(dat$RpS)==TRUE] <- 0
@@ -291,30 +351,57 @@ length(minN[minN==0])/length(minN)
 
 
 
-# Figure 4----
+                              ##%######################################################%##
+                              #                                                          #
+                              ####                   Figure 4----                     ####
+                              #                                                          #
+                              ##%######################################################%##
+
 
 dat<- read.csv("intrusion_one-off_set2_output.csv", header=T)
 
+
+# 4.1 Relevel competitive ability variable----
 dat <- dat %>% 
   mutate(Comp=factor(Comp)) %>% 
-  mutate(Comp=fct_relevel(Comp,c("intruders competitively inferior","intruders competitively equal","intruders competitively superior")))
+  mutate(Comp=fct_relevel(Comp,c("intruders competitively inferior",
+                                 "intruders competitively equal",
+                                 "intruders competitively superior")))
 
-# Replace NAs with 0s for the pop size variables (as NA = gone extinct)
+
+# 4.2 Replace NAs with 0s for the pop size variables (as NA = gone extinct)----
 dat$N_breeders[dat$N_breeders==0] <- NA
 dat$N_recruits[dat$N_recruits==0] <- NA
 dat$RpS[dat$RpS==0] <- NA
 
-dat$Intrusion <- factor(dat$Intrusion, levels=c("low intrusion", "moderate intrusion", "high intrusion"))
 
-dat$Reprod.excess <- factor(dat$Reprod.excess, levels=c("low repr. excess", "moderate repr. excess", "high repr. excess"))
+# 4.3 Relevel intrusion and reproductive excess variables and use them to assign labels to the factor levels for use in the facet plots----
+dat$Intrusion <- factor(dat$Intrusion, levels=c("low intrusion", 
+                                                "moderate intrusion", 
+                                                "high intrusion"))
 
-intrusion_labs <- c("Low intrusion", "Moderate intrusion", "High intrusion")
-names(intrusion_labs) <- c("low intrusion", "moderate intrusion", "high intrusion")
+dat$Reprod.excess <- factor(dat$Reprod.excess, levels=c("low repr. excess",
+                                                        "moderate repr. excess",
+                                                        "high repr. excess"))
 
-reproductive_excess <- c("Low reproductive excess", "Moderate reproductive excess", "High reproductive excess")
-names(reproductive_excess) <- c("low repr. excess", "moderate repr. excess", "high repr. excess")
+intrusion_labs <- c("Low intrusion",
+                    "Moderate intrusion",
+                    "High intrusion")
+
+names(intrusion_labs) <- c("low intrusion", 
+                           "moderate intrusion", 
+                           "high intrusion")
+
+reproductive_excess <- c("Low reproductive excess",
+                         "Moderate reproductive excess", 
+                         "High reproductive excess")
+
+names(reproductive_excess) <- c("low repr. excess",
+                                "moderate repr. excess",
+                                "high repr. excess")
 
 
+# 4.4 Number of spawners----
 p1<- ggplot(dat, aes(Generation, N_breeders, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,100) + 
@@ -334,28 +421,44 @@ p1<- ggplot(dat, aes(Generation, N_breeders, colour=Comp))+
         axis.title.x =  element_text(colour = "black", size = 14, face = "bold"))
 
 
+# 4.5 Aesthetics for plot----
+p1 + plot_layout(guides = "collect") & 
+  theme(legend.position = 'bottom') & 
+  guides(colour=guide_legend(nrow=1)) & 
+  labs(colour= "Competitive abilty")
 
 
-p1 + plot_layout(guides = "collect") & theme(legend.position = 'bottom') & guides(colour=guide_legend(nrow=1)) & labs(colour= "Competitive abilty")
 
 
+                              ##%######################################################%##
+                              #                                                          #
+                              ####                   Figure 5----                     ####
+                              #                                                          #
+                              ##%######################################################%##
 
-
-# Figure 5----
-Maxgen<- 150
 
 dat<- read.csv("intrusion_continuous_set1_output.csv", header=T)
 
+
+# 5.1 Set the maximum number of generations to plot on the x-axis----
+Maxgen<- 150
+
+
+# 5.2 Relevel competitive ability variable----
 dat <- dat %>% 
   mutate(Comp=factor(Comp)) %>% 
-  mutate(Comp=fct_relevel(Comp,c("intruders competitively inferior","intruders competitively equal","intruders competitively superior")))
+  mutate(Comp=fct_relevel(Comp,c("intruders competitively inferior",
+                                 "intruders competitively equal",
+                                 "intruders competitively superior")))
 
-# Replace NAs with 0s for the pop size variables (as NA = gone extinct)
+
+# 5.3 Replace NAs with 0s for the pop size variables (as NA = gone extinct)----
 dat$N_breeders[dat$N_breeders==0] <- NA
 dat$N_recruits[dat$N_recruits==0] <- NA
 dat$RpS[dat$RpS==0] <- NA
 
 
+# 5.4 Soft-selected trait plot----
 p1<- ggplot(dat, aes(Generation, Mean_P_hard, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   ylim(-40,10)+
@@ -374,6 +477,8 @@ p1<- ggplot(dat, aes(Generation, Mean_P_hard, colour=Comp))+
         axis.text.y =  element_text(colour = "black", size = 14),
         axis.line = element_line(colour = "black"))
 
+
+# 5.5 Recruits per spawner plot----
 p2<- ggplot(dat, aes(Generation, RpS, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,Maxgen) + 
@@ -392,6 +497,8 @@ p2<- ggplot(dat, aes(Generation, RpS, colour=Comp))+
         axis.text.y =  element_text(colour = "black", size = 14),
         axis.line = element_line(colour = "black"))
 
+
+# 5.6 Hard-selected trait plot----
 p3<- ggplot(dat, aes(Generation, Mean_P_soft, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,Maxgen) + 
@@ -409,6 +516,8 @@ p3<- ggplot(dat, aes(Generation, Mean_P_soft, colour=Comp))+
         axis.text.y =  element_text(colour = "black", size = 14),
         axis.line = element_line(colour = "black"))
 
+
+# 5.7 Frequency of foreign allele at neutral locus plot----
 p4<- ggplot(dat, aes(Generation, Allele_freq, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,Maxgen) + 
@@ -426,6 +535,8 @@ p4<- ggplot(dat, aes(Generation, Allele_freq, colour=Comp))+
         axis.text.y =  element_text(colour = "black", size = 14),
         axis.line = element_line(colour = "black"))
 
+
+# 5.8 Number of recruits plot----
 p5<- ggplot(dat, aes(Generation, N_recruits, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,Maxgen) + 
@@ -444,6 +555,7 @@ p5<- ggplot(dat, aes(Generation, N_recruits, colour=Comp))+
         axis.line = element_line(colour = "black"))
 
 
+# 5.9 Number of spawners plot----
 p6<- ggplot(dat, aes(Generation, N_breeders, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,Maxgen) + 
@@ -462,11 +574,17 @@ p6<- ggplot(dat, aes(Generation, N_breeders, colour=Comp))+
         axis.line = element_line(colour = "black"))
 
 
-(p1+p2)/(p3+p4)/(p5+p6) + plot_layout(guides = "collect") + plot_annotation(tag_levels = 'A') & theme(legend.position = 'bottom') & guides(colour=guide_legend(nrow=1)) & labs(colour = "Competitive ability")
+# 5.10 Combine the above six plots into six panels in a single figure----
+(p1+p2)/(p3+p4)/(p5+p6) +
+  plot_layout(guides = "collect") + 
+  plot_annotation(tag_levels = 'A') &
+  theme(legend.position = 'bottom') &
+  guides(colour=guide_legend(nrow=1)) & 
+  labs(colour = "Competitive ability")
 
-# Fraction replicates that went extinct:
-http://127.0.0.1:24375/graphics/plot_zoom_png?width=1680&height=987
-# Replace NAs with 0s for the pop size variables (as NA = gone extinct)
+
+# 5.11 Fraction replicates that went extinct----
+# 5.11.1 Replace NAs with 0s for the pop size variables (as NA = gone extinct)----
 dat$N_breeders[is.na(dat$N_breeders)==TRUE] <- 0
 dat$N_recruits[is.na(dat$N_recruits)==TRUE] <- 0
 dat$RpS[is.na(dat$RpS)==TRUE] <- 0
@@ -475,18 +593,33 @@ minN<- tapply(dat$N_recruits, dat$replicate, min, na.rm=T)
 length(minN[minN==0])/length(minN)
 
 
-# Figure 6----
+
+
+                            ##%######################################################%##
+                            #                                                          #
+                            ####                   Figure 6----                     ####
+                            #                                                          #
+                            ##%######################################################%##
+
+
 dat<- read.csv("intrusion_continuous_set2_output.csv", header=T)
 
+
+# 6.1 Relevel competitive ability variable----
 dat <- dat %>% 
   mutate(Comp=factor(Comp)) %>% 
-  mutate(Comp=fct_relevel(Comp,c("intruders competitively inferior","intruders competitively equal","intruders competitively superior")))
+  mutate(Comp=fct_relevel(Comp,c("intruders competitively inferior",
+                                 "intruders competitively equal",
+                                 "intruders competitively superior")))
 
-# Replace NAs with 0s for the pop size variables (as NA = gone extinct)
+
+# 6.2 Replace NAs with 0s for the pop size variables (as NA = gone extinct)----
 dat$N_breeders[dat$N_breeders==0] <- NA
 dat$N_recruits[dat$N_recruits==0] <- NA
 dat$RpS[dat$RpS==0] <- NA
 
+
+# 6.3 Hard-selected trait plot----
 p1<- ggplot(dat, aes(Generation, Mean_P_hard, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   ylim(-40,10)+
@@ -505,6 +638,8 @@ p1<- ggplot(dat, aes(Generation, Mean_P_hard, colour=Comp))+
         axis.text.y =  element_text(colour = "black", size = 14),
         axis.line = element_line(colour = "black"))
 
+
+# 6.4 Recruits per spawner plot----
 p2<- ggplot(dat, aes(Generation, RpS, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,Maxgen) + 
@@ -523,6 +658,8 @@ p2<- ggplot(dat, aes(Generation, RpS, colour=Comp))+
         axis.text.y =  element_text(colour = "black", size = 14),
         axis.line = element_line(colour = "black"))
 
+
+# 6.5 Soft-selected trait plot----
 p3<- ggplot(dat, aes(Generation, Mean_P_soft, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,Maxgen) + 
@@ -540,6 +677,7 @@ p3<- ggplot(dat, aes(Generation, Mean_P_soft, colour=Comp))+
         axis.text.y =  element_text(colour = "black", size = 14),
         axis.line = element_line(colour = "black"))
 
+# 6.6 Frequency of foreign allele at neutral locus plot----
 p4<- ggplot(dat, aes(Generation, Allele_freq, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,Maxgen) + 
@@ -557,6 +695,8 @@ p4<- ggplot(dat, aes(Generation, Allele_freq, colour=Comp))+
         axis.text.y =  element_text(colour = "black", size = 14),
         axis.line = element_line(colour = "black"))
 
+
+# 6.7 Number of recruits plot----
 p5<- ggplot(dat, aes(Generation, N_recruits, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,Maxgen) + 
@@ -574,8 +714,9 @@ p5<- ggplot(dat, aes(Generation, N_recruits, colour=Comp))+
         axis.text.y =  element_text(colour = "black", size = 14),
         axis.line = element_line(colour = "black"))
 
+
+# 6.8 Number of spawners plot----
 p6<- ggplot(dat, aes(Generation, N_breeders, colour=Comp))+
-  #geom_hline(yintercept=500, linetype = "dashed")+  
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,Maxgen) + 
   ylim(-100,600)+ 
@@ -593,33 +734,10 @@ p6<- ggplot(dat, aes(Generation, N_breeders, colour=Comp))+
         axis.line = element_line(colour = "black"))
 
 
-(p1 + p2)/(p3+p4)/(p5+p6) + plot_layout(guides = "collect") + plot_annotation(tag_levels = 'A') & theme(legend.position = 'bottom') & guides(colour=guide_legend(nrow=1)) & labs(colour = "Competitive ability")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# 6.9 Combine the above six plots into six panels in a single figure----
+(p1 + p2)/(p3+p4)/(p5+p6) +
+  plot_layout(guides = "collect") + 
+  plot_annotation(tag_levels = 'A') & 
+  theme(legend.position = 'bottom') & 
+  guides(colour=guide_legend(nrow=1)) &
+  labs(colour = "Competitive ability")
