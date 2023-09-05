@@ -2,14 +2,14 @@
 
 
 
-############################################################
-#                                                          #
-#          Plotting of supplementary figures for           #
-#      "Soft selection affects introgression dynamics      #
-#             and the viability of populations             #
-# experiencing intrusion from maladapted individuals"----  #
-#                                                          #
-############################################################
+                            ############################################################
+                            #                                                          #
+                            #          Plotting of supplementary figures for           #
+                            #      "Soft selection affects introgression dynamics      #
+                            #             and the viability of populations             #
+                            # experiencing intrusion from maladapted individuals"----  #
+                            #                                                          #
+                            ############################################################
 
 
 
@@ -25,7 +25,11 @@ library(patchwork)
 
 
 
-# Figure S1----
+                            ############################################################
+                            #                                                          #
+                            #                      Figure S1----                       #
+                            #                                                          #
+                            ############################################################
 
 
 # 1.1 Load data----
@@ -86,7 +90,11 @@ p1/p2 + plot_annotation(tag_levels = 'A')
 
 
 
-# Figure S2----
+                          ############################################################
+                          #                                                          #
+                          #                      Figure S2----                       #
+                          #                                                          #
+                          ############################################################
 
 
 # 2.1 Load data---- 
@@ -127,7 +135,7 @@ p1<- ggplot(dat, aes(Generation, Allele_freq, colour=Comp))+
 p1 & labs(colour = "Competitive ability")
 
 
-# 2.5 Fraction replicates that went extinct----
+# 2.5 Fraction of replicates that went extinct----
 # 2.5.1 Replace NAs with 0s for the pop size variables (as NA = gone extinct)----
 dat$N_breeders[is.na(dat$N_breeders)==TRUE] <- 0
 dat$N_recruits[is.na(dat$N_recruits)==TRUE] <- 0
@@ -139,7 +147,11 @@ length(minN[minN==0])/length(minN)
 
 
 
-# Figure S3----
+                            ############################################################
+                            #                                                          #
+                            #                      Figure S3----                       #
+                            #                                                          #
+                            ############################################################
 
 # 3.1 Load data----
 dat<- read.csv("intrusion_one-off_set2_output.csv", header=T)
@@ -212,7 +224,11 @@ p1 + plot_layout(guides = "collect") &
 
 
 
-# Figure S4----
+                        ############################################################
+                        #                                                          #
+                        #                      Figure S4----                       #
+                        #                                                          #
+                        ############################################################
 
 
 # 4.1 Recruits per spawner plot----
@@ -245,7 +261,11 @@ p1 + plot_layout(guides = "collect") &
 
 
 
-# 5.0 Figure S5----
+                          ############################################################
+                          #                                                          #
+                          #                    5.0 Figure S5----                     #
+                          #                                                          #
+                          ############################################################
 
 
 # 5.1 Calculate the percentage of model runs where the population went extinct----
@@ -284,48 +304,100 @@ p1
 
 
 
-# Figure 6----
+                        ############################################################
+                        #                                                          #
+                        #                     Figure S6----                        #
+                        #                                                          #
+                        ############################################################
 
 # 6.1 Load data----
 dat<- read.csv("intrusion_one-off_set1B_output.csv", header=T)
 
+
+# 6.2 Relevel competitive ability and maladaptation variables and set facet label headings----
 dat <- dat %>% 
   mutate(Comp=factor(Comp)) %>% 
-  mutate(Comp=fct_relevel(Comp,c("intruders competitively inferior","intruders competitively equal","intruders competitively superior")))
+  mutate(Comp=fct_relevel(Comp,c("intruders competitively inferior", 
+                                 "intruders competitively equal", 
+                                 "intruders competitively superior")))
 
 dat <- dat %>% 
   mutate(Maladaptation=factor(Maladaptation)) %>% 
-  mutate(Maladaptation=fct_relevel(Maladaptation,c("intruders weakly maladapted","intruders moderately maladapted","intruders strongly maladapted")))
+  mutate(Maladaptation=fct_relevel(Maladaptation,c("intruders weakly maladapted", 
+                                                   "intruders moderately maladapted", 
+                                                   "intruders strongly maladapted")))
+
+maladaptation_labs <- c("Intruders weakly maladapted", 
+                        "Intruders moderately maladapted", 
+                        "Intruders strongly maladapted")
+
+names(maladaptation_labs) <- c("intruders weakly maladapted", 
+                               "intruders moderately maladapted", 
+                               "intruders strongly maladapted")
 
 
-# Replace NAs with 0s for the pop size variables (as NA = gone extinct)
+# 6.3 Replace NAs with 0s for the pop size variables (as NA = gone extinct)----
 dat$N_breeders[dat$N_breeders==0] <- NA
 dat$N_recruits[dat$N_recruits==0] <- NA
 dat$RpS[dat$RpS==0] <- NA
 
+
+# 6.4 Mean of hard-selected trait plot----
 p1<- ggplot(dat, aes(Generation, Mean_P_hard, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   ylim(-25,10)+
-  stat_summary(geom="line", fun=mean) +xlim(0,100) +
+  stat_summary(geom="line", fun=mean) + 
+  xlim(0,100) +
   geom_hline(yintercept=0, linetype = "dashed") +
-  ylab("Mean of \n hard-selected trait") + theme_bw() +
-  facet_wrap(~Maladaptation)
+  ggtitle("Mean of hard-selected trait") +
+  xlab("") +
+  ylab("") +
+  theme_bw() +
+  facet_wrap(~Maladaptation, 
+             labeller = labeller(Maladaptation = maladaptation_labs)) + 
+  
+  scale_color_manual(values = c("#D55E00", "#009E73", "#CC79A7")) +
+  
+      theme(strip.text.x = element_text(size = 12, face = "bold"),
+        plot.title = element_text(size = 15, face = "bold"), 
+        text = element_text(size = 12),
+        axis.title.x =  element_text(colour = "black", size = 14, face = "bold"),
+        axis.text.x =  element_text(colour = "black", size = 14),
+        axis.text.y =  element_text(colour = "black", size = 14))
 
+
+# 6.5 Number of spawners plot----
 p2<- ggplot(dat, aes(Generation, N_breeders, colour=Comp))+
   stat_summary(geom="ribbon", fun.data=mean_cl_normal, fill="lightgrey")+
   stat_summary(geom="line", fun=mean) +xlim(0,100) + 
   ylim(0,600)+ 
-  ylab("Number of \n spawners") +
-  #geom_hline(yintercept=0, linetype = "dashed") +
-  theme_bw()+
-  facet_wrap(~Maladaptation)
+  ggtitle("Number of spawners") +
+  xlab("\nGeneration") +
+  ylab("") +
+  theme_bw() +
+  facet_wrap(~Maladaptation, 
+             labeller = labeller(Maladaptation = maladaptation_labs)) + 
+  
+  scale_color_manual(values = c("#D55E00", "#009E73", "#CC79A7")) +
+  
+  theme(strip.text.x = element_text(size = 12, face = "bold"),
+        plot.title = element_text(size = 15, face = "bold"), 
+        text = element_text(size = 12),
+        axis.title.x =  element_text(colour = "black", size = 14, face = "bold"),
+        axis.text.x =  element_text(colour = "black", size = 14),
+        axis.text.y =  element_text(colour = "black", size = 14))
 
-p1/p2 + plot_layout(guides = "collect") + plot_annotation(tag_levels = 'A') & theme(legend.position = 'bottom') & guides(colour=guide_legend(nrow=3)) & labs(colour=NULL)
+
+# 6.6 Combine the above plots into two panels in a single figure----
+p1/p2 + plot_layout(guides = "collect") + 
+  plot_annotation(tag_levels = 'A') & 
+  theme(legend.position = 'bottom') & 
+  guides(colour=guide_legend(nrow = 1)) & 
+  labs(colour = "Competitive ability")
 
 
-# Fraction replicates that went extinct:
-
-# Replace NAs with 0s for the pop size variables (as NA = gone extinct)
+# 6.6 Fraction of replicates that went extinct----
+# 6.6.1 Replace NAs with 0s for the pop size variables (as NA = gone extinct)----
 dat$N_breeders[is.na(dat$N_breeders)==TRUE] <- 0
 dat$N_recruits[is.na(dat$N_recruits)==TRUE] <- 0
 dat$RpS[is.na(dat$RpS)==TRUE] <- 0
@@ -336,9 +408,11 @@ length(minN[minN==0])/length(minN)
 
 
 
-
-
-# Figure S7----
+                          ############################################################
+                          #                                                          #
+                          #                      Figure S7----                       #
+                          #                                                          #
+                          ############################################################
 
 
 # 7.1 Load data----
@@ -362,6 +436,8 @@ dat$RpS[dat$RpS==0] <- NA
 # 7.4 Set heritability labels----
 h2labs<- c("h2 = 0.25", "h2 = 0.50")
 names(h2labs)<- c("heritability = 0.25","heritability = 0.5")
+
+Maxgen<- 150
 
 
 # 7.5 Mean of hard-selected trait plot----
@@ -514,7 +590,11 @@ length(minN[minN==0])/length(minN)
 
 
 
-# Figure  S8----
+                          ############################################################
+                          #                                                          #
+                          #                     Figure  S8----                       #
+                          #                                                          #
+                          ############################################################
 
 
 # 8.1 Set the maximum number of generations to plot on the x-axis----
@@ -683,7 +763,7 @@ p6<- ggplot(dat, aes(Generation, N_breeders, colour=Comp))+
   labs(colour = "Competitive ability")
 
 
-# 8.13 Fraction replicates that went extinct----
+# 8.13 Fraction of replicates that went extinct----
 # 8.13.1 Replace NAs with 0s for the pop size variables (as NA = gone extinct)----
 dat$N_breeders[is.na(dat$N_breeders)==TRUE] <- 0
 dat$N_recruits[is.na(dat$N_recruits)==TRUE] <- 0
@@ -695,7 +775,11 @@ length(minN[minN==0])/length(minN)
 
 
 
-# Figure S9----
+                          ############################################################
+                          #                                                          #
+                          #                      Figure S9----                       #
+                          #                                                          #
+                          ############################################################
 
 
 # 9.1 Load data----
@@ -859,7 +943,7 @@ p6<- ggplot(dat, aes(Generation, N_breeders, colour=Comp))+
   labs(colour = "Competitive ability")
 
 
-# 9.12 Fraction replicates that went extinct----
+# 9.12 Fraction of replicates that went extinct----
 # 9.12.1 Replace NAs with 0s for the pop size variables (as NA = gone extinct)----
 dat$N_breeders[is.na(dat$N_breeders)==TRUE] <- 0
 dat$N_recruits[is.na(dat$N_recruits)==TRUE] <- 0
