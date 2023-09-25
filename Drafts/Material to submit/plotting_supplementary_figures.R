@@ -14,7 +14,6 @@
 
 
 # Set working directory and load packages----
-setwd("C:\\Users\\rjosul\\Dropbox\\Research\\soft_selection_output\\Output")
 
 library(dplyr)
 library(forcats)
